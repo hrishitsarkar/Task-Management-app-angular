@@ -1,0 +1,35 @@
+<div class="flex w-full flex-col items-center p-5">
+    <div class="flex flex-row items-center justify-between">
+        <h1 class="font-bold text-[2.5rem] m-5">Your Tasks</h1>
+        <button (click)="sortByDate()" class="m-2 font-bold bg-blue-700 text-white  p-2 hover:border-2 hover:border-sky-300">Sort By Due Date</button>
+        <button (click)="sortByPriority()" class=" m-2 font-bold bg-green-300  text-black  p-2 hover:border-2 hover:border-sky-300">Sort By Priority</button>
+        <button (click)="sortByStatus()" class=" m-2 font-bold bg-red-400  text-black  p-2 hover:border-2 hover:border-black">Sort By Status</button>
+        <button (click)="exportCsv()" class=" m-2 font-bold bg-red-400  text-black  p-2 hover:border-2 hover:border-black">Export Tasks</button>
+    
+    </div>
+    
+    <div id="card" 
+        class="m-5 bg-white relative flex group p-5 hover:scale-[1.1] flex-col w-[80%]  justify-items-start justify-start shadow-2xl"
+        *ngFor="let task of alltasks$ | async;">
+        <h1 class="m-3 font-bold text-[1.5rem] "><span class="font-bold text-2xl text-black">Task Title :</span> {{task.title}} <span *ngIf="isEditing"></span></h1>
+        <h1 class="m-3 max-w-[80%] text-[1rem] max-h-[160px] overflow-hidden break-words "><span class=" text-black font-bold text-2xl">Task Description :</span> {{task.desc}}</h1>
+        <div class="flex  flex-col">
+            <h1 class="m-3 font-bold text-[1.2rem]"><span class="font-bold text-2xl text-black">Due Date :</span> <span class="text-red-600"> {{task.date}}</span>  </h1>
+            <h1 class="m-3 font-bold text-[1.2rem]"><span class="font-bold text-2xl text-black">Priority :</span>  {{task.priority}}</h1>
+        </div>
+        <h1 class="m-3 font-bold"><span class="font-bold text-2xl text-black">Status :</span><span class="border-2 border-red-600 rounded-lg p-2 hover:bg-red-600 hover:text-white transition ease-in-out delay-150 cursor-pointer">{{task.status}} </span> </h1>
+
+
+
+        <img  (click)="onEditButtonClick(task)" src="https://cdn-icons-png.flaticon.com/128/1001/1001371.png" alt="edit"
+            class="absolute top-[-20px] right-[30px] group-hover:block w-[30px] h-[30px] hidden icons hover:scale-[1.3] cursor-pointer">
+
+
+        <img (click)="deleteaTask(task)" src="https://cdn-icons-png.flaticon.com/128/6861/6861362.png" alt="delete"
+            class="absolute top-[-20px] right-[0px] group-hover:block w-[30px] h-[30px] hidden icons hover:scale-[1.3] cursor-pointer">
+
+
+
+
+    </div>
+</div>

@@ -1,0 +1,12 @@
+<app-todo-input [selectedTask]="selectedTask" [isEditing]="isEditing">
+
+
+</app-todo-input>
+
+  <app-todo-cards [exportCsv]="exportCsv" [sortByStatus]="sortByStatus" [sortByDate]="sortByDate" [sortByPriority] = "sortByPriority" [editTask]="editTask" [isEditing]="isEditing" (editButtonClick)="editTask($event)" >
+  </app-todo-cards>
+
+ 
+
+
+

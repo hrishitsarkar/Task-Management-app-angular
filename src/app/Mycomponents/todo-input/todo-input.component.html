@@ -1,0 +1,95 @@
+<div  class="w-full flex flex-col items-center justify-center mb-[20px]">
+    <div class=" flex flex-row items-center justify-center p-5 w-full">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Bright_green_checkbox-checked.svg/768px-Bright_green_checkbox-checked.svg.png" class="w-[100px] h-[100px]" alt="task">
+        <h1 class="font-bold text-[2rem] m-5 text-teal-700">Task Management System </h1>
+    </div>
+    
+        
+        
+        <div *ngIf="!isEditing" class=" bg-gray-200 w-[80%] flex flex-col border-4 items-center p-5 rounded-lg ">
+            <input type="text" [(ngModel)] = 'task.title' placeholder="Enter a title" class="rounded-full border-b-2 w-[80%] m-4 h-[40px] p-2">
+            <input type="text" [(ngModel)] = 'task.desc' placeholder="Enter Description" class="rounded-full border-b-2 w-[80%] m-4 h-[40px] p-2">
+            <div class="flex w-[80%] flex-row items-center justify-between m-2">
+    
+                <input type="date" class="m-2 bg-inherit rounded-full" [(ngModel)] = 'task.date'>
+                <input class="w-[80%] m-2 " type="text" placeholder="Select Due Date" [disabled] = true value="{{task.date}}">
+            </div>
+            <div class="w-[80%] flex flex-row items-center m-2 justify-start flex-wrap">
+                <h1 class=" font-bold text-[1.5rem]">Select Priority :</h1>
+            <div class="flex flex-row m-5 items-center">
+                <input type="radio" name="priority" id="low" value="Low" [(ngModel)] = 'task.priority' >
+                <label for="low" class="m-2 text-green-800">Low</label>
+                <input type="radio" name="priority" id="medium" value="Medium" [(ngModel)] = 'task.priority' >
+                <label for="low" class="m-2">Medium</label>
+                
+                <input type="radio" name="priority" id="high" value="High" [(ngModel)] = 'task.priority' >
+                <label for="low" class="m-2 text-red-700">High</label>
+                
+            </div>
+            
+            </div>
+            <div class="w-[80%] flex flex-row items-center m-2 justify-start flex-wrap">
+                <h1 class=" font-bold text-[1.5rem]">Select Status :</h1>
+            <div class="flex flex-row m-5 items-center">
+                <input type="radio" name="status" id="pending" value="Pending" [(ngModel)] = 'task.status' >
+                <label for="pending" class="m-2 text-red-600">Pending</label>
+                <input type="radio" name="status" id="inprogress" value="In-Progress" [(ngModel)] = 'task.status' >
+                <label for="inprogress" class="m-2 text-orange-400">In-Progress</label>
+                
+                <input type="radio" name="status" id="completed" value="Completed" [(ngModel)] = 'task.status' >
+                <label for="completed" class="m-2 text-green-800">Completed</label>
+                
+            </div>
+            
+            </div>
+            <button class="font-bold border-green-500 border-2 p-2 rounded-full text-green-800 hover:bg-green-500 hover:text-black" (click) = 'addaTask()'>Add Task</button>
+            
+        </div>
+        <div *ngIf="isEditing" class=" bg-gray-200 w-[80%] flex flex-col border-4 items-center p-5 rounded-lg ">
+            <input type="text" [(ngModel)] = 'task.title' placeholder="Enter new title"  class="rounded-full border-b-2 w-[80%] m-4 h-[40px] p-2">
+            <input type="text" [(ngModel)] = 'task.desc' placeholder="Enter new Description" class="rounded-full border-b-2 w-[80%] m-4 h-[40px] p-2">
+            <div class="flex w-[80%] flex-row items-center justify-between m-2">
+    
+                <input type="date" class="m-2 bg-inherit rounded-full" [(ngModel)] = 'task.date'>
+                <input class="w-[80%] m-2 " type="text" placeholder="Select new Date" [disabled] = true value="{{task.date}}">
+            </div>
+            <div class="w-[80%] flex flex-row items-center m-2 justify-start flex-wrap">
+                <h1 class=" font-bold text-[1.5rem]">Update Priority :</h1>
+            <div class="flex flex-row m-5 items-center">
+                <input type="radio" name="priority" id="low" value="Low" [(ngModel)] = 'task.priority' >
+                <label for="low" class="m-2 text-green-800">Low</label>
+                <input type="radio" name="priority" id="medium" value="Medium" [(ngModel)] = 'task.priority' >
+                <label for="low" class="m-2">Medium</label>
+                
+                <input type="radio" name="priority" id="high" value="High" [(ngModel)] = 'task.priority' >
+                <label for="low" class="m-2 text-red-700">High</label>
+                
+            </div>
+            
+            </div>
+            <div class="w-[80%] flex flex-row items-center m-2 justify-start flex-wrap">
+                <h1 class=" font-bold text-[1.5rem]">Update Status :</h1>
+            <div class="flex flex-row m-5 items-center">
+                <input type="radio" name="status" id="pending" value="Pending" [(ngModel)] = 'task.status' >
+                <label for="pending" class="m-2 text-red-600">Pending</label>
+                <input type="radio" name="status" id="inprogress" value="In-Progress" [(ngModel)] = 'task.status' >
+                <label for="inprogress" class="m-2 text-orange-400">In-Progress</label>
+                
+                <input type="radio" name="status" id="completed" value="Completed" [(ngModel)] = 'task.status' >
+                <label for="completed" class="m-2 text-green-800">Completed</label>
+                
+            </div>
+            
+            </div>
+            <button class="font-bold border-black border-2 p-2 rounded-full text-black hover:bg-black hover:text-white" [disabled]="selectedTask === null" (click) = 'updateaTask(selectedTask)'>Update Task</button>
+            
+        </div>
+        
+    </div>
+    
+    
+    
+    
+
+
+
