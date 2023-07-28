@@ -1,5 +1,4 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input } from '@angular/core';
-import { Task } from './task/tasks.model';
 import {db} from '../firebaseInit';
 import { Store } from '@ngrx/store';
 import { collection, addDoc, setDoc, doc, onSnapshot } from "firebase/firestore"; 
@@ -8,6 +7,9 @@ import { addTask, resetTasks } from './task/tasks.action';
 import { selectAllTasks } from './task/tasks.selector';
 import {  compareTasksByDate, compareTasksByPriority, compareTasksByStatus,  } from './task.util';
 import { convertToCSV } from './csvTask.util';
+import { ngxCsv } from 'ngx-csv';
+import { ToastrService } from 'ngx-toastr';
+import { Task } from './Task';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -15,15 +17,20 @@ import { convertToCSV } from './csvTask.util';
 })
 export class AppComponent  {
   todos : any = []; 
-  constructor(private store: Store<AppState>,private cdr: ChangeDetectorRef) {}
-  selectedTask: Task | null = null;
-  isEditing: boolean = false;
+  selectedTask?: Task;
+  constructor(private store: Store<AppState>,private cdr: ChangeDetectorRef,private toastr: ToastrService) {}
   
+ 
+
+  isEditing: boolean = false;
+  updateTask(){
+    console.log("inside update",this.selectedTask)
+  }
   editTask(task: Task) {
     this.isEditing = true;
-    this.selectedTask = task;
-    console.log(this.selectedTask)
-    alert('Please update in the form above')
+    this.selectedTask = new Task(task.id, task.title, task.desc, task.date,task.priority,task.status,task.createdOn,task.updatedOn);
+    
+    this.toastr.info('Please update in the form above')
     
   }
   ngOnInit(){
@@ -46,19 +53,9 @@ export class AppComponent  {
       this.store.dispatch(addTask({ task }));
     });
 });
-alert("Sorted by due dates")
+this.toastr.success("Sorted by Due Dates")
  }
- downloadCSV(data: string, filename: string) {
-  const blob = new Blob([data], { type: 'text/csv' });
-  const url = window.URL.createObjectURL(blob);
-
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  a.click();
-
-  window.URL.revokeObjectURL(url);
-}
+ 
  sortByPriority(){
   const unsub = onSnapshot(collection(db,'tasks'), (snapshot) => {
     const tasks : any[] = snapshot.docs.map((doc) => {
@@ -73,20 +70,17 @@ alert("Sorted by due dates")
       this.store.dispatch(addTask({ task }));
     });
 });
-alert("Sorted by priorities")
+this.toastr.success("Sorted by Priorities")
  }
  exportCsv() {
-  const unsub = onSnapshot(collection(db,'tasks'), (snapshot) => {
-    const tasks : any[] = snapshot.docs.map((doc) => {
-      
-      return {
-        ...doc.data()
-      }
-    })
-    const csv = convertToCSV(tasks);
-    this.downloadCSV(csv, 'tasks.csv');
-  })
-  ;
+  
+  this.store.select(selectAllTasks).subscribe((tasks) => {
+    var options = {
+      headers : ['title','desc','date','priority','status','createdOn','updatedOn','id']
+    }
+    new ngxCsv(tasks,"report",options)
+  });
+  this.toastr.success("Tasks Exported Successfully")
 }
 
 
@@ -104,7 +98,7 @@ alert("Sorted by priorities")
       this.store.dispatch(addTask({ task }));
     });
 });
-alert("Sorted by Status")
+this.toastr.success("Sorted by Status")
  }
 
 

@@ -10,7 +10,7 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^16.1.0",
+    "@angular/animations": "^16.1.7",
     "@angular/common": "^16.1.0",
     "@angular/compiler": "^16.1.0",
     "@angular/core": "^16.1.0",
@@ -23,6 +23,8 @@
     "@ngrx/store": "^16.1.0",
     "@ngrx/store-devtools": "^16.1.0",
     "firebase": "^10.1.0",
+    "ngx-csv": "^0.3.2",
+    "ngx-toastr": "^17.0.2",
     "papaparse": "^5.4.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

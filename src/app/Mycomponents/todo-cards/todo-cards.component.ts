@@ -1,6 +1,7 @@
 import { Component ,EventEmitter,Input, Output} from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { deleteDoc, doc } from 'firebase/firestore';
+import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { Task } from 'src/app/Task';
 import { AppState } from 'src/app/app.state';
@@ -23,7 +24,7 @@ export class TodoCardsComponent {
   @Input() sortByStatus: () => void = () => {};
 
   @Output() editButtonClick: EventEmitter<Task> = new EventEmitter<Task>();
-  constructor(private store: Store) {}
+  constructor(private store: Store,private toastr: ToastrService) {}
     ngOnInit(){
       
     }
@@ -31,7 +32,7 @@ export class TodoCardsComponent {
       if(task !== null){
         await deleteDoc(doc(db, "tasks", task.id));
       }
-      alert("Task deleted successfully")
+      this.toastr.success("Task Deleted Successfully")
     }
     onEditButtonClick(task: Task) {
       this.editButtonClick.emit(task);

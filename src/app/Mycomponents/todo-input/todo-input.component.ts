@@ -5,6 +5,7 @@ import { Task } from 'src/app/Task';
 import { AppState } from 'src/app/app.state';
 import { addTask, deleteTask } from 'src/app/task/tasks.action';
 import { db } from 'src/firebaseInit';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-todo-input',
   templateUrl: './todo-input.component.html',
@@ -23,10 +24,10 @@ export class TodoInputComponent {
     updatedOn: '',
     id: ''
   }
-  constructor(private store: Store<AppState> ,private cdr: ChangeDetectorRef) {}
+  constructor(private store: Store<AppState> ,private cdr: ChangeDetectorRef,private toastr: ToastrService) {}
   
  ngOnInit(){
-  console.log('Received isEditing value:', this.isEditing);
+  
   
  }
  ngOnChanges(changes: SimpleChanges) {
@@ -34,8 +35,8 @@ export class TodoInputComponent {
   if (changes['isEditing']) {
     // Update the 'isEditing' value in the component
     this.isEditing = changes['isEditing'].currentValue;
-    console.log('Received isEditing value in TodoInputComponent:', this.isEditing);
-    // You can also perform additional logic or actions here if needed
+    
+    
   }
 }
   
@@ -50,7 +51,7 @@ export class TodoInputComponent {
       priority: this.task.priority,
       status : this.task.status,
       createdOn : new Date().toJSON().slice(0, 10),
-      updatedOn : ''
+      updatedOn : 'N/A'
     }
     const docRef =  doc(collection(db, "tasks"));
     
@@ -58,31 +59,28 @@ export class TodoInputComponent {
     
     await setDoc(docRef,newTaskWithId);
     this.clearInputs();
-    alert("Task added successfully")
+    this.toastr.success('Task Created Successfully');
     
+   }else{
+    this.toastr.error('Please fill all the fields');
    }
   }
   
-  async updateaTask(task : Task | null){
-    if(task !== null){
-      const taskRef = doc(db, "tasks", task.id);
-      const newTask = {
-        title : this.task.title,
-      desc : this.task.desc,
-      date : this.task.date,
-      priority: this.task.priority,
-      status : this.task.status,
+   async updateaTask(task : Task | null ){
+    if (task !== null && this.selectedTask !== null) {
       
-      updatedOn : new Date().toJSON().slice(0, 10),
-      }
-      await updateDoc(taskRef,newTask);
-      this.clearInputs();
-      this.isEditing=false
-      alert("Updated Successfully")
-;    }else{
-      return;
+
+     
+      const updatedTask = {...this.selectedTask}
+      const taskRef = doc(db, "tasks", this.selectedTask.id);
+
+      await updateDoc(taskRef,{...updatedTask,updatedOn : new Date().toJSON().slice(0, 10)});
+      this.isEditing = false
+      this.toastr.success("Task Updated Successfully");
+
     }
-  }
+  
+}
   clearInputs(){
     this.task.title = '';
     this.task.desc = '';
